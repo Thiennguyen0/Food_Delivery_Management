@@ -49,7 +49,7 @@ class Cus_manager:
     
     def list_cus(self):
         query = "SELECT cus_id, cus_name, cus_phone FROM Customers"
-        return exe_query(query)
+        return exe_query(query, ())
     
 class Emp_manager:
     def add(self, name):
@@ -62,7 +62,7 @@ class Emp_manager:
     
     def list_emp(self):
         query = "SELECT emp_id, emp_name FROM Employees"
-        return exe_query(query)
+        return exe_query(query, ())
     
     def count_bill(self):
         query = """SELECT Employeess.emp_id, emp_name
@@ -83,7 +83,7 @@ class Dish_manager:
     
     def list_dishes(self):
         query = "SELECT dish_id, dish_name, recipe, cooking_time, dish_price FROM Dishes"
-        return exe_query(query)
+        return exe_query(query, ())
     
 class Ingredient:
     def add(self, name, stock, unit, expiry, suppliers):
@@ -92,7 +92,7 @@ class Ingredient:
     
     def get_all(self):
         query = "SELECT ingre_id, ingre_name, stock, unit, expiry, suppliers FROM Ingredients"
-        return exe_query(query)
+        return exe_query(query, ())
     
     def update_stock(self, ingre_id, new_stock):
         query = "UPDATE Ingredients SET stock = ? WHERE ingre_id = ?"
@@ -105,7 +105,7 @@ class Ingredient:
 class ShipperManager:
     def get_all(self):
         query = "SELECT shipper_id, shipper_info FROM Shippers"
-        return exe_query(query)
+        return exe_query(query, ())
 
 cus_manager = Cus_manager()
 while True:
