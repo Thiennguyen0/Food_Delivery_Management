@@ -8,13 +8,17 @@ def connect():
     conn.row_factory = sqlite3.Row
     return conn
 
-def exe_query(query, param, commit = False, fetch_one = False):
+def exe_query(query, param = None, commit = False, fetch_one = False):
     conn = connect()
     cur = conn.cursor()
     result = None
     
     try:
-        cur.execute(query, param)
+        if param:
+            cur.execute(query, param)
+        else:
+            cur.execute(query)
+
         if commit:
             conn.commit()
             result = True
@@ -71,7 +75,8 @@ class Emp_manager:
         LEFT JOIN Bills ON Employees.emp_id = Bills.emp_id
         GROUP BY emp_id, emp_name
         ODRDER BY orders_served"""
-
+        return exe_query(query)
+    
 class Dish_manager:
     def add(self, name):
         query = "INSERT INTO  Dishes (dish_name) VALUES (?)"
