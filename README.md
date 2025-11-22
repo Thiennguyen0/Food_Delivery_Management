@@ -1,1 +1,1 @@
-Đức là một con lợn béo
+Đức là một con lợn béo (bị gay)
