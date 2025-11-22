@@ -90,7 +90,7 @@ class Dish_manager:
         query = "SELECT dish_id, dish_name, recipe, cooking_time, dish_price FROM Dishes"
         return exe_query(query, ())
     
-class Ingredient:
+class Ingredient_manager:
     def add(self, name, stock, unit, expiry, suppliers):
         query = "INSERT INTO Ingredients (ingre_name, stock, unit, expiry, suppliers) VALUES (?, ?, ?, ?, ?)"
         return exe_query(query, (name, stock, unit, expiry, suppliers), commit=True)
@@ -107,7 +107,7 @@ class Ingredient:
         #cai nay lam sau luoi qua
         pass
 
-class ShipperManager:
+class Shipper_manager:
     def get_all(self):
         query = "SELECT shipper_id, shipper_info FROM Shippers"
         return exe_query(query, ())
