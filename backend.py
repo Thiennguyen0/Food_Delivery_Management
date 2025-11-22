@@ -75,7 +75,7 @@ class Emp_manager:
         LEFT JOIN Bills ON Employees.emp_id = Bills.emp_id
         GROUP BY emp_id, emp_name
         ODRDER BY orders_served"""
-        return exe_query(query)
+        return exe_query(query, ())
     
 class Dish_manager:
     def add(self, name):
