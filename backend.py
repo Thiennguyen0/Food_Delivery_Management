@@ -40,7 +40,7 @@ def exe_query(query, param = None, commit = False, fetch_one = False):
 
 class Cus_manager: 
     def add(self, name, phone):
-        query = "INSERT INTO CUstomers (cus_name, cus_phone) VALUES (?,?)"
+        query = "INSERT INTO Customers (cus_name, cus_phone) VALUES (?,?)"
         return exe_query(query, (name, phone), commit = True)
     
     def remove(self, cus_id):
