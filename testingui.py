@@ -1,4 +1,5 @@
 import customtkinter
+import backend
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -82,49 +83,62 @@ class Dashboard(customtkinter.CTkFrame):
             'order1': '#FF6B6B',
             'order2': '#F38181',
             'revenue2': "#00FF59",
-            'leave': '#2C3E50',
+            'leave': 'gray28',
             'info': '#AA96DA',
             'dark': '#2C3E50',
         }
 
         self.contentfont = ("Segoe UI", 24, 'bold')
+        self.numberfont = ("Segoe UI", 34, 'bold')
 
 
         self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=1)
-        self.columnconfigure(2, weight=1)
-        self.columnconfigure(3, weight=1)
+        # self.columnconfigure(1, weight=1)
+        # self.columnconfigure(2, weight=1)
+        # self.columnconfigure(3, weight=1)
 
 
-        self.lbf = customtkinter.CTkFrame(self)
-        self.lbf.pack(padx= 20, pady=20, anchor="n")
+        self.lbf = customtkinter.CTkFrame(self, corner_radius=10)
+        self.lbf.grid(row=0,column=0,padx= 20, pady=20, sticky="nsew")
         self.label = customtkinter.CTkLabel(self.lbf, text="Dashboard Overview", text_color="#D8D8D8", font=('Segoe UI', 45, 'bold'))
-        self.label.pack()
+        self.label.pack(padx=20,pady=20)
+
+
 
         self.contentf = customtkinter.CTkFrame(self)
-        self.contentf.pack(expand=True,anchor="n")
+        self.contentf.grid(row=1, column=0,padx=20, pady=(0,20),sticky="nsew")
+        self.contentf.columnconfigure(1, weight=1)
+        self.contentf.columnconfigure(2, weight=1)
+        self.contentf.columnconfigure(3, weight=1)
+        self.contentf.columnconfigure(0, weight=1)
 
         #Revenue
         self.revenuef = customtkinter.CTkFrame(self.contentf, border_width=3)
-        self.revenuef.grid(row=1,column=0,padx=20,pady=15, sticky="nw")
+        self.revenuef.grid(row=1,column=0,padx=20,pady=15, sticky="nsew")
         self.revenuef.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenuef.bind("<Leave>", lambda event2: on_leave(event2, self.revenuef,self.colors['leave']))
 
         self.revenuet = customtkinter.CTkLabel(self.revenuef, text=f"💰Total Revenue", text_color=self.colors['revenue1'], font=self.contentfont)
-        self.revenue = customtkinter.CTkLabel(self.revenuef, text="revenue..", text_color=self.colors['revenue1'], font=self.contentfont)
+
+        self.revenue = customtkinter.CTkLabel(self.revenuef, text="revenue..", text_color=self.colors['revenue1'], font=self.numberfont)
         self.revenuet.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenue.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
+
+        # self.revenuef.rowconfigure(0, weight=1)
+        # self.revenuef.rowconfigure(1, weight=1)
+
         self.revenuet.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
         self.revenue.grid(row=1,column=0,padx=25,pady=(0,25),stick="nsew")
 
         #Order
         self.orderf = customtkinter.CTkFrame(self.contentf, border_width=3)
-        self.orderf.grid(row=1,column=1,padx=20,pady=15, sticky="nw")
+        self.orderf.grid(row=1,column=1,padx=20,pady=15, sticky="nsew")
         self.orderf.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.orderf.bind("<Leave>", lambda event2: on_leave(event2, self.orderf, self.colors['leave']))
 
         self.ordert = customtkinter.CTkLabel(self.orderf, text=f"🛒Orders ", text_color=self.colors['order1'], font=self.contentfont)
-        self.order = customtkinter.CTkLabel(self.orderf, text="order..", text_color=self.colors['order1'], font=self.contentfont)
+
+        self.order = customtkinter.CTkLabel(self.orderf, text="order..", text_color=self.colors['order1'], font=self.numberfont)
         self.ordert.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.order.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.ordert.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
@@ -132,12 +146,13 @@ class Dashboard(customtkinter.CTkFrame):
 
         # Customers
         self.customersf = customtkinter.CTkFrame(self.contentf, border_width=3)
-        self.customersf.grid(row=1,column=2,padx=20,pady=15, sticky="nw")
+        self.customersf.grid(row=1,column=2,padx=20,pady=15, sticky="nsew")
         self.customersf.bind("<Enter>", lambda event1: on_enter(event1, self.customersf, self.colors['info']))
         self.customersf.bind("<Leave>", lambda event2: on_leave(event2, self.customersf, self.colors['leave']))
 
         self.customerst = customtkinter.CTkLabel(self.customersf, text=f"👥Customers ", text_color=self.colors['info'], font=self.contentfont)
-        self.customers = customtkinter.CTkLabel(self.customersf, text="customers..", text_color=self.colors['info'], font=self.contentfont)
+
+        self.customers = customtkinter.CTkLabel(self.customersf, text=f"{len(master.system.cus_manager.list_cus())}", text_color=self.colors['info'], font=self.numberfont)
         self.customerst.bind("<Enter>", lambda event1: on_enter(event1, self.customersf, self.colors['info']))
         self.customers.bind("<Enter>", lambda event1: on_enter(event1, self.customersf, self.colors['info']))
         self.customerst.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
@@ -145,12 +160,13 @@ class Dashboard(customtkinter.CTkFrame):
 
         #Menu Items
         self.menuitems = customtkinter.CTkFrame(self.contentf, border_width=3)
-        self.menuitems.grid(row=1,column=3,padx=20,pady=15, sticky="nw")
+        self.menuitems.grid(row=1,column=3,padx=20,pady=15, sticky="nsew")
         self.menuitems.bind("<Enter>", lambda event1: on_enter(event1, self.menuitems, self.colors['order1']))
         self.menuitems.bind("<Leave>", lambda event2: on_leave(event2, self.menuitems, self.colors['leave']))
 
         self.menut = customtkinter.CTkLabel(self.menuitems, text=f"🍕Menu Items ", text_color=self.colors['order2'], font=self.contentfont)
-        self.menu = customtkinter.CTkLabel(self.menuitems, text="10", text_color=self.colors['order2'], font=self.contentfont)
+
+        self.menu = customtkinter.CTkLabel(self.menuitems, text=f"{len(master.system.dish_manager.list_dishes())}", text_color=self.colors['order2'], font=self.numberfont)
         self.menut.bind("<Enter>", lambda event1: on_enter(event1, self.menuitems, self.colors['order1']))
         self.menu.bind("<Enter>", lambda event1: on_enter(event1, self.menuitems, self.colors['order1']))
         self.menut.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
@@ -204,6 +220,10 @@ class Root(customtkinter.CTk):
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(1, weight=2)
+
+        backend.connect()
+        self.system=backend.System()
+        # print(self.system.emp_manager.list_emp())
 
         self.SelectionBar = Selection_Frame(master=self)        
         self.SelectionBar.grid(row=0, column=0, padx=(20, 0), pady=20, sticky="nsew")
