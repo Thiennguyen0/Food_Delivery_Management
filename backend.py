@@ -89,7 +89,14 @@ class Dish_manager:
     def list_dishes(self):
         query = "SELECT dish_id, dish_name, recipe, cooking_time, dish_price FROM Dishes"
         return exe_query(query, ())
-    
+
+
+class Order_manager:
+    def get_all_order_details(self):
+        query="SELECT order_id, dish_req, total_price, order_time, status, cus_id FROM Orders"
+        return exe_query(query, )
+
+
 class Ingredient_manager:
     def add(self, name, stock, unit, expiry, suppliers):
         query = "INSERT INTO Ingredients (ingre_name, stock, unit, expiry, suppliers) VALUES (?, ?, ?, ?, ?)"
@@ -112,29 +119,39 @@ class Shipper_manager:
         query = "SELECT shipper_id, shipper_info FROM Shippers"
         return exe_query(query, ())
 
-cus_manager = Cus_manager()
-while True:
-    print("1. add customer")
-    print("2. remove customer")
-    print("3. find customer")
-    print("4. list customers")
-    print("q. back")
-    choice = input("chọn: ")
-    
-    if choice == "1":
-        name = input("tên: ")
-        phone = input("dth: ")
-        cus_manager.add(name, phone)
-    elif choice == "2":
-        cus_id = int(input("Customer ID to remove: "))
-        cus_manager.remove(cus_id)
-    elif choice == "3":
-        phone = input("Customer phone: ")
-        result = cus_manager.find_cus(phone)
-        print(result)
-    elif choice == "4":
-        result = cus_manager.list_cus()
-        for row in result:
-            print(dict(row))
-    elif choice == "q":
-        break
+class System:
+    def __init__(self):
+        self.cus_manager=Cus_manager()
+        self.emp_manager=Emp_manager()
+        self.dish_manager=Dish_manager()
+        self.ingr_manager=Ingredient_manager()
+        self.shipper_manager=Shipper_manager()
+        self.order_manager=Order_manager()
+
+if __name__=="__main__":
+    cus_manager = Order_manager()
+    while True:
+        print("1. add customer")
+        print("2. remove customer")
+        print("3. find customer")
+        print("4. list customers")
+        print("q. back")
+        choice = input("chọn: ")
+        
+        if choice == "1":
+            name = input("tên: ")
+            phone = input("dth: ")
+            cus_manager.add(name, phone)
+        elif choice == "2":
+            cus_id = int(input("Customer ID to remove: "))
+            cus_manager.remove(cus_id)
+        elif choice == "3":
+            phone = input("Customer phone: ")
+            result = cus_manager.find_cus(phone)
+            print(result)
+        elif choice == "4":
+            result = cus_manager.get_all_order_details()
+            data = [dict(resul) for resul in result]
+            print(len(data))
+        elif choice == "q":
+            break

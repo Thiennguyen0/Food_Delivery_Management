@@ -112,23 +112,24 @@ class Dashboard(customtkinter.CTkFrame):
         self.contentf.columnconfigure(3, weight=1)
         self.contentf.columnconfigure(0, weight=1)
 
+
+        order_rawdat = master.system.order_manager.get_all_order_details()
+        order_dat = [dict(data) for data in order_rawdat]
+
         #Revenue
         self.revenuef = customtkinter.CTkFrame(self.contentf, border_width=3)
         self.revenuef.grid(row=1,column=0,padx=20,pady=15, sticky="nsew")
         self.revenuef.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenuef.bind("<Leave>", lambda event2: on_leave(event2, self.revenuef,self.colors['leave']))
 
-        self.revenuet = customtkinter.CTkLabel(self.revenuef, text=f"💰Total Revenue", text_color=self.colors['revenue1'], font=self.contentfont)
+        self.revenuet = customtkinter.CTkLabel(self.revenuef, text=f"💰 Total Revenue", text_color=self.colors['revenue1'], font=self.contentfont, anchor='center')
 
-        self.revenue = customtkinter.CTkLabel(self.revenuef, text="revenue..", text_color=self.colors['revenue1'], font=self.numberfont)
+        self.revenue = customtkinter.CTkLabel(self.revenuef, text=f"{sum(order['total_price'] for order in order_dat):,.0f}", text_color=self.colors['revenue1'], font=self.numberfont, anchor='center')
         self.revenuet.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenue.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
 
-        # self.revenuef.rowconfigure(0, weight=1)
-        # self.revenuef.rowconfigure(1, weight=1)
-
         self.revenuet.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
-        self.revenue.grid(row=1,column=0,padx=25,pady=(0,25),stick="nsew")
+        self.revenue.grid(row=1,column=0,padx=25,pady=(0,25),sticky="nsew")
 
         #Order
         self.orderf = customtkinter.CTkFrame(self.contentf, border_width=3)
@@ -138,7 +139,7 @@ class Dashboard(customtkinter.CTkFrame):
 
         self.ordert = customtkinter.CTkLabel(self.orderf, text=f"🛒Orders ", text_color=self.colors['order1'], font=self.contentfont)
 
-        self.order = customtkinter.CTkLabel(self.orderf, text="order..", text_color=self.colors['order1'], font=self.numberfont)
+        self.order = customtkinter.CTkLabel(self.orderf, text=f"{len(order_dat)}", text_color=self.colors['order1'], font=self.numberfont)
         self.ordert.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.order.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.ordert.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
