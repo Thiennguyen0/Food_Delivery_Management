@@ -15,7 +15,6 @@ def on_leave(event, frame, color):
 
 def show_frame(root, sframe):
     for button in root.SelectionBar.winfo_children()[1:]:
-        # print(button.cget("font"))
         if button.cget("text") == sframe.__name__ or not button.cget("fg_color") == '#1f538d' or not button.cget("font") == ('Arial', 24, 'bold'):
             eval(f"root.SelectionBar.{sframe.__name__}.configure(fg_color='#1f538d', font=('Arial', 24, 'bold'))")
         else:
@@ -87,31 +86,26 @@ class Dashboard(customtkinter.CTkFrame):
             'info': '#AA96DA',
             'dark': '#2C3E50',
         }
-
+        # print(self.cget('fg_color'))
         self.contentfont = ("Segoe UI", 24, 'bold')
         self.numberfont = ("Segoe UI", 34, 'bold')
 
-
         self.columnconfigure(0, weight=1)
-        # self.columnconfigure(1, weight=1)
-        # self.columnconfigure(2, weight=1)
-        # self.columnconfigure(3, weight=1)
 
-
-        self.lbf = customtkinter.CTkFrame(self, corner_radius=10)
-        self.lbf.grid(row=0,column=0,padx= 20, pady=20, sticky="nsew")
-        self.label = customtkinter.CTkLabel(self.lbf, text="Dashboard Overview", text_color="#D8D8D8", font=('Segoe UI', 45, 'bold'))
+        #Title
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0,column=0,padx=20, pady=20, sticky="nsw")
+        self.label = customtkinter.CTkLabel(self.lbf, text="Dashboard Overview", text_color="#D8D8D8", font=('Segoe UI', 50, 'bold'))
         self.label.pack(padx=20,pady=20)
 
 
-
+        #Maincontent------
         self.contentf = customtkinter.CTkFrame(self)
         self.contentf.grid(row=1, column=0,padx=20, pady=(0,20),sticky="nsew")
         self.contentf.columnconfigure(1, weight=1)
         self.contentf.columnconfigure(2, weight=1)
         self.contentf.columnconfigure(3, weight=1)
         self.contentf.columnconfigure(0, weight=1)
-
 
         order_rawdat = master.system.order_manager.get_all_order_details()
         order_dat = [dict(data) for data in order_rawdat]
@@ -122,11 +116,13 @@ class Dashboard(customtkinter.CTkFrame):
         self.revenuef.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenuef.bind("<Leave>", lambda event2: on_leave(event2, self.revenuef,self.colors['leave']))
 
-        self.revenuet = customtkinter.CTkLabel(self.revenuef, text=f"💰 Total Revenue", text_color=self.colors['revenue1'], font=self.contentfont, anchor='center')
+        self.revenuet = customtkinter.CTkLabel(self.revenuef, text=f"💰Total Revenue", text_color=self.colors['revenue1'], font=self.contentfont, anchor='center')
 
         self.revenue = customtkinter.CTkLabel(self.revenuef, text=f"{sum(order['total_price'] for order in order_dat):,.0f}", text_color=self.colors['revenue1'], font=self.numberfont, anchor='center')
         self.revenuet.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
         self.revenue.bind("<Enter>", lambda event1: on_enter(event1, self.revenuef,self.colors['revenue2']))
+        self.revenuet.bind("<Leave>", lambda event2: on_leave(event2, self.revenuef,self.colors['leave']))
+        self.revenue.bind("<Leave>", lambda event2: on_leave(event2, self.revenuef,self.colors['leave']))
 
         self.revenuet.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
         self.revenue.grid(row=1,column=0,padx=25,pady=(0,25),sticky="nsew")
@@ -142,6 +138,9 @@ class Dashboard(customtkinter.CTkFrame):
         self.order = customtkinter.CTkLabel(self.orderf, text=f"{len(order_dat)}", text_color=self.colors['order1'], font=self.numberfont)
         self.ordert.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
         self.order.bind("<Enter>", lambda event1: on_enter(event1, self.orderf, self.colors['order2']))
+        self.ordert.bind("<Leave>", lambda event2: on_leave(event2, self.orderf,self.colors['leave']))
+        self.order.bind("<Leave>", lambda event2: on_leave(event2, self.orderf,self.colors['leave']))
+
         self.ordert.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
         self.order.grid(row=1,column=0,padx=25,pady=(0,25),stick="nsew")
 
@@ -156,6 +155,9 @@ class Dashboard(customtkinter.CTkFrame):
         self.customers = customtkinter.CTkLabel(self.customersf, text=f"{len(master.system.cus_manager.list_cus())}", text_color=self.colors['info'], font=self.numberfont)
         self.customerst.bind("<Enter>", lambda event1: on_enter(event1, self.customersf, self.colors['info']))
         self.customers.bind("<Enter>", lambda event1: on_enter(event1, self.customersf, self.colors['info']))
+        self.customerst.bind("<Leave>", lambda event2: on_leave(event2, self.customersf, self.colors['leave']))
+        self.customers.bind("<Leave>", lambda event2: on_leave(event2, self.customersf, self.colors['leave']))
+
         self.customerst.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
         self.customers.grid(row=1,column=0,padx=25,pady=(0,25),stick="nsew")
 
@@ -170,6 +172,9 @@ class Dashboard(customtkinter.CTkFrame):
         self.menu = customtkinter.CTkLabel(self.menuitems, text=f"{len(master.system.dish_manager.list_dishes())}", text_color=self.colors['order2'], font=self.numberfont)
         self.menut.bind("<Enter>", lambda event1: on_enter(event1, self.menuitems, self.colors['order1']))
         self.menu.bind("<Enter>", lambda event1: on_enter(event1, self.menuitems, self.colors['order1']))
+        self.menut.bind("<Leave>", lambda event2: on_leave(event2, self.menuitems, self.colors['leave']))
+        self.menu.bind("<Leave>", lambda event2: on_leave(event2, self.menuitems, self.colors['leave']))
+
         self.menut.grid(row=0,column=0,padx=25, pady=25,sticky="nsew")
         self.menu.grid(row=1,column=0,padx=25,pady=(0,25),stick="nsew")
         
@@ -177,8 +182,30 @@ class Customers(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.Label = customtkinter.CTkLabel(self, text="Customers")
-        self.Label.pack()
+        self.columnconfigure(0, weight=1)
+        # self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+
+        #FF
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0,column=0,padx= 20, pady=(15,0), sticky="nsw")
+        self.label = customtkinter.CTkLabel(self.lbf, text="Custom Management", text_color="#D8D8D8", font=('Segoe UI', 50, 'bold'))
+        self.label.pack(padx=20,pady=20)
+
+        #FF
+        self.searchf = customtkinter.CTkFrame(self)
+        self.searchf.grid(row=1,column=0,padx=20,pady=(20,),sticky='nsew')
+        # print(self.searchf.cget('fg_color'))
+
+        self.searchvar=customtkinter.StringVar()
+        self.icon = customtkinter.CTkLabel(self.searchf, text="🔍", font=("Segoe UI Emoji", 24)).pack(side="left", padx=8,pady=10)
+        self.searchbox = customtkinter.CTkEntry(self.searchf,textvariable=self.searchvar,placeholder_text=' Search for customers', fg_color=['gray90', 'gray16'],border_width=1, width=200, height=40).pack(side="left",padx=(0,8),pady=10)
+
+        #FF
+        self.contentf=customtkinter.CTkFrame(self)
+        self.contentf.grid(row=2,column=0,padx=20,pady=(15,),sticky='nsew')
+
+
 
 class Dishes(customtkinter.CTkFrame):
     def __init__(self, master):
@@ -253,5 +280,8 @@ class Root(customtkinter.CTk):
    
 
 #Mainloop
-root = Root(Dashboard)
-root.mainloop()
+if __name__ == "__main__":
+    root = Root(Customers)
+    root.update()
+
+    root.mainloop()
