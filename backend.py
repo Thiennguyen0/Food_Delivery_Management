@@ -92,10 +92,74 @@ class Dish_manager:
 
 
 class Order_manager:
-    def get_all_order_details(self):
-        query="SELECT order_id, dish_req, total_price, order_time, status, cus_id FROM Orders"
-        return exe_query(query, )
+    def create_orders(self, dish_req_in, total_price, cus_id):
+        order_time = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        status = "Chờ duyệt"
+        
+        conn = connect()
+        cur = conn.cursor()
+        order_id = None
+        try:
+            cur.execute("""
+                INSERT INTO Orders (dish_req, total_price, order_time, status, cus_id) 
+                VALUES (?, ?, ?, ?, ?)
+            """, (dish_req_in, total_price, order_time, status, cus_id))
+            order_id = cur.lastrowid
+            conn.commit()
+        except sqlite3.Error as e:
+            print(f"Order Creation Error: {e}")
+            conn.rollback()
+        finally:
+            conn.close()
+        
+        return order_id
+    
+    def create_bill(self, order_id, emp_id, shipper_id, total_amount):
+        bill_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        query = """
+        INSERT INTO Bills (order_id, emp_id, shipper_id, total_amount, bill_time) 
+        VALUES (?, ?, ?, ?, ?)
+        """
+        return exe_query(query, (order_id, emp_id, shipper_id, total_amount, bill_time), commit=True)
+    
+    def add_delivery(self, order_id, shipper_id, delivery_addr, distance, fee):
+        delivery_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        query = """
+        INSERT INTO Deliveries (order_id, shipper_id, delivery_time, delivery_addr, distance, fee) 
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
+        return exe_query(query, (order_id, shipper_id, delivery_time, delivery_addr, distance, fee), commit=True)
+    
+    def get_all_orders_details(self):
+        query = """
+        SELECT 
+            o.order_id, o.dish_req, o.total_price, o.order_time, o.status,
+            c.cus_name, c.cus_phone
+        FROM 
+            Orders o
+        JOIN 
+            Customers c ON o.cus_id = c.cus_id
+        ORDER BY 
+            o.order_time DESC
+        """
+        return exe_query(query)
+    
+    def update_status(self, order_id, status):
+        query = "UPDATE Orders SET status = ? WHERE order_id = ?"
+        return exe_query(query, (status, order_id), commit=True)
 
+    def get_delivery_info(self, order_id):
+        query = """
+        SELECT 
+            d.delivery_addr, d.distance, d.fee, s.shipper_info
+        FROM 
+            Deliveries d
+        JOIN 
+            Shippers s ON d.shipper_id = s.shipper_id
+        WHERE 
+            d.order_id = ?
+        """
+        return exe_query(query, (order_id,), fetch_one=True)
 
 class Ingredient_manager:
     def add(self, name, stock, unit, expiry, suppliers):
