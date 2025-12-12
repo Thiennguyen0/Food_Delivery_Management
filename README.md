@@ -7,7 +7,7 @@ Do sự linh hoạt và hiệu cũng như dễ dùng và phạm vi sử dụng r
 
 Dự án sử dụng SQLite (để làm việc với cơ sở dữ liêu), thư viện CustomTkinter để lập trình giao diện, các thư viện phụ như datetime, json để làm việc với thời gian và đóng và mở gói cấu trúc json.
 
-Tổng số file trong dự án này là 6 files bao gồm (create_db.py dùng để tạo lập cơ sở dữ liệu ban đầu, food_db.db là cơ sở dữ liệu - có thể trực quan hóa bằng phần mềm DB Browser, backend.py dùng để handle query và kết nối với cơ sở dữ liệu, fixed_ui.py là phần giao diện đã được sửa lại nhiều lần để phù hợp nhất với các tính năng và có tính thẩm mỹ, 1 file đc xuất chương trình ra .exe để tiện cho việc sử dụng, và file README.md)
+Tổng số file trong dự án này là 6 files bao gồm (create_db.py dùng để tạo lập cơ sở dữ liệu ban đầu, food_db.db là cơ sở dữ liệu - có thể trực quan hóa bằng phần mềm DB Browser, backend.py dùng để handle query và kết nối với cơ sở dữ liệu, ui.py là phần giao diện đã được sửa lại nhiều lần để phù hợp nhất với các tính năng và có tính thẩm mỹ, 1 file đc xuất chương trình ra .exe để tiện cho việc sử dụng, và file README.md)
 
 Các tính năng chính:
 - Quản lý kho nguyên liệu  
