@@ -243,9 +243,9 @@ class Customers(customtkinter.CTkFrame):
         # Header
         header_frame = customtkinter.CTkFrame(scroll_frame, fg_color=["#1f538d", "#3a6ea5"])
         header_frame.pack(fill="x", pady=(0, 5))
-        customtkinter.CTkLabel(header_frame, text="ID", width=10, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5)
-        customtkinter.CTkLabel(header_frame, text="Name", width=30, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5)
-        customtkinter.CTkLabel(header_frame, text="Phone", width=20, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5)
+        customtkinter.CTkLabel(header_frame, text="ID", width=10, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5, expand=True)
+        customtkinter.CTkLabel(header_frame, text="Name", width=30, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5, expand=True)
+        customtkinter.CTkLabel(header_frame, text="Phone", width=20, font=("Arial", 16, "bold")).pack(side="left", padx=10, pady=5, expand=True)
 
         customers = self.backend.list_cus()  # [(id, name, phone), ...]
         if not customers:
@@ -273,19 +273,19 @@ class Customers(customtkinter.CTkFrame):
             row_frame.bind("<Button-1>", lambda e, cid=cid, name=name, phone=phone: self.edit_customer_popup(cid, name, phone))
 
             cus_id = customtkinter.CTkLabel(row_frame, text=str(cid), text_color="black", width=10, font=("Arial", 14))
-            cus_id.pack(side="left", padx=10, pady=5)
+            cus_id.pack(side="left", padx=10, pady=5, expand = True)
             cus_id.bind("<Enter>", on_enter)
             cus_id.bind("<Leave>", on_leave)
             cus_id.bind("<Button-1>", lambda e, cid=cid, name=name, phone=phone: self.edit_customer_popup(cid, name, phone))
 
             cus_name = customtkinter.CTkLabel(row_frame, text=name, text_color="black", width=30, font=("Arial", 14))
-            cus_name.pack(side="left", padx=10, pady=5)
+            cus_name.pack(side="left", padx=10, pady=5, expand = True)
             cus_name.bind("<Enter>", on_enter)
             cus_name.bind("<Leave>", on_leave)
             cus_name.bind("<Button-1>", lambda e, cid=cid, name=name, phone=phone: self.edit_customer_popup(cid, name, phone))
 
             cus_phone = customtkinter.CTkLabel(row_frame, text=phone, text_color="black", width=20, font=("Arial", 14))
-            cus_phone.pack(side="left", padx=10, pady=5)
+            cus_phone.pack(side="left", padx=10, pady=5, expand = True)
             cus_phone.bind("<Enter>", on_enter)
             cus_phone.bind("<Leave>", on_leave)
             cus_phone.bind("<Button-1>", lambda e, cid=cid, name=name, phone=phone: self.edit_customer_popup(cid, name, phone))
@@ -359,6 +359,7 @@ class Customers(customtkinter.CTkFrame):
         customtkinter.CTkLabel(popup, text="Phone Number").pack(pady=10)
         phone_entry = customtkinter.CTkEntry(popup, textvariable=phone_var)
         phone_entry.pack(pady=5)
+        popup.attributes('-topmost', True)
         def submit():
             name = name_var.get().strip()
             phone = phone_var.get().strip()
@@ -379,6 +380,10 @@ class Dishes(customtkinter.CTkFrame):
         
         self.Label = customtkinter.CTkLabel(self, text="Dishes")
         self.Label.pack()
+
+
+
+
 
 class Ingredients(customtkinter.CTkFrame):
     def __init__(self, master):
