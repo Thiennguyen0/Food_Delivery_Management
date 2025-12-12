@@ -41,15 +41,21 @@ def exe_query(query, param = None, commit = False, fetch_one = False):
 class Cus_manager: 
     def add(self, name, phone):
         query = "INSERT INTO Customers (cus_name, cus_phone) VALUES (?,?)"
-        return exe_query(query, (name, phone), commit = True)
+        return exe_query(query, (name, phone), commit=True)
     
     def remove(self, cus_id):
         query = "DELETE FROM Customers WHERE cus_id = ?"
-        return exe_query(query, (cus_id,), commit = True)
+        return exe_query(query, (cus_id,), commit=True)
     
-    def find_cus(self, phone):
-        query = "SELECT cus_id, cus_name, cus_phone FROM Customers WHERE cus_phone = ?"
-        return exe_query(query, (phone,), fetch_one = True)
+    def find_cus(self, keyword):
+        query = """
+            SELECT cus_id, cus_name, cus_phone
+            FROM Customers
+            WHERE cus_phone = ?
+               OR cus_name LIKE ?
+        """
+        params = (keyword, f"%{keyword}%")
+        return exe_query(query, params, fetch_one=True)
     
     def list_cus(self):
         query = "SELECT cus_id, cus_name, cus_phone FROM Customers"
@@ -93,6 +99,8 @@ class Dish_manager:
 
 class Order_manager:
     def create_orders(self, dish_req_in, total_price, cus_id):
+        #dish_req_in này lấy cái từ ui chọn món với số món thành dict {dish_id: quantity} đưa qua cái used_stock rồi mới chuyển thành list để vào cái exe_query ở dưới
+        #cái dish_req_in phải đưa vào đc cả hai cái manager nên nhớ làm nó global hay là một object luôn
         order_time = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         status = "Chờ duyệt"
         
@@ -142,8 +150,9 @@ class Order_manager:
         ORDER BY 
             o.order_time DESC
         """
-        return exe_query(query)
-    
+        result = exe_query(query)
+        return result if result is not None else []
+
     def update_status(self, order_id, status):
         query = "UPDATE Orders SET status = ? WHERE order_id = ?"
         return exe_query(query, (status, order_id), commit=True)
@@ -174,8 +183,14 @@ class Ingredient_manager:
         query = "UPDATE Ingredients SET stock = ? WHERE ingre_id = ?"
         return exe_query(query, (new_stock, ingre_id), commit=True)
     
-    def used_stock(self):
-        #cai nay lam sau luoi qua
+    def used_stock(self, dish_req_in):
+        for dish_id, quantity in dish_req_in.item():
+            exe_query("""
+            UPDATE Dishes
+            SET 
+                      
+                      """)
+
         pass
 
 class Shipper_manager:
