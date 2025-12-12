@@ -22,7 +22,6 @@ cur.execute("""
 CREATE TABLE Dishes (
     dish_id INTEGER PRIMARY KEY AUTOINCREMENT,
     dish_name TEXT NOT NULL,
-    recipe TEXT,
     cooking_time INTEGER,
     dish_price REAL
 )
@@ -90,15 +89,32 @@ CREATE TABLE Bills (
 )
 """)
 
+cur.execute("""
+CREATE TABLE Dish_Ingredients (
+    dish_id INTEGER,
+    ingre_id INTEGER,
+    quantity REAL,
+    PRIMARY KEY (dish_id, ingre_id),
+    FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id),
+    FOREIGN KEY (ingre_id) REFERENCES Ingredients(ingre_id)
+)
+""")
+
+cur.execute("INSERT INTO Dish_Ingredients VALUES (1, 2, 0.2)")
+cur.execute("INSERT INTO Dish_Ingredients VALUES (1, 3, 0.05)")
+cur.execute("INSERT INTO Dish_Ingredients VALUES (1, 1, 0.1)")
+cur.execute("INSERT INTO Dish_Ingredients VALUES (2, 3, 0.3)")
+cur.execute("INSERT INTO Dish_Ingredients VALUES (2, 1, 0.2)")
+
 cur.executemany("INSERT INTO Ingredients (ingre_name, stock, unit, expiry, suppliers) VALUES (?, ?, ?, ?, ?)", [
     ("cà chua", 100, "kg", "2025-12-31", "Nhà ngoại"),
     ("Thịt gà", 50, "kg", "2025-11-20", "Nhà nội"),
     ("Phô mai", 30, "kg", "2025-12-15", "Nhà trồng"),
 ])
 
-cur.executemany("INSERT INTO Dishes (dish_name, recipe, cooking_time, dish_price) VALUES (?, ?, ?, ?)", [
-    ("Burger gà", "Gà, phô mai, cà chua", 15, 60000),
-    ("Pizza", "Phô mai, Cà Chua", 20, 100000),
+cur.executemany("INSERT INTO Dishes (dish_name, cooking_time, dish_price) VALUES (?, ?, ?)", [
+    ("Burger gà", 15, 60000),
+    ("Pizza", 20, 100000),
 ])
 
 cur.executemany("INSERT INTO Customers (cus_name, cus_phone) VALUES (?, ?)", [
