@@ -96,7 +96,7 @@ class Dashboard(customtkinter.CTkFrame):
 
         #Title
         self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
-        self.lbf.grid(row=0,column=0,padx=20, pady=20, sticky="nsw")
+        self.lbf.grid(row=0,column=0,padx=20, pady=10, sticky="nsw")
         self.label = customtkinter.CTkLabel(self.lbf, text="Dashboard Overview", text_color="#D8D8D8", font=('Segoe UI', 50, 'bold'))
         self.label.pack(padx=20,pady=20)
 
@@ -196,7 +196,7 @@ class Customers(customtkinter.CTkFrame):
 
         # Header Frame
         self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
-        self.lbf.grid(row=0, column=0, padx=20, pady=(15, 0), sticky="nsw")
+        self.lbf.grid(row=0, column=0, padx=20, pady=(10, 0), sticky="nsw")
         self.label = customtkinter.CTkLabel(
             self.lbf, text="Customer Management", text_color="#D8D8D8",
             font=('Segoe UI', 50, 'bold')
@@ -377,34 +377,215 @@ class Customers(customtkinter.CTkFrame):
 class Dishes(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
+
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
         
-        self.Label = customtkinter.CTkLabel(self, text="Dishes")
-        self.Label.pack()
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0, column=0, padx=20, pady=(10, 0), sticky="nsw")
+        self.label = customtkinter.CTkLabel(
+            self.lbf, text="Dish Management", text_color="#D8D8D8",
+            font=('Segoe UI', 50, 'bold')
+        )
+        self.label.pack(padx=20, pady=20)
+
+
+        self.searchf = customtkinter.CTkFrame(self)
+        self.searchf.grid(row=1, column=0, padx=20, pady=(20, 0), sticky='nsew')
+        self.searchvar = customtkinter.StringVar()
+        self.icon = customtkinter.CTkLabel(self.searchf, text="🔍", font=("Segoe UI Emoji", 24))
+        self.icon.pack(side="left", padx=8, pady=10)
+        self.searchbox = customtkinter.CTkEntry(
+            self.searchf, textvariable=self.searchvar, placeholder_text='Search for dishes',
+            fg_color=['gray90', 'gray16'], border_width=1, width=200, height=40
+        )
+        self.searchbox.pack(side="left", padx=(0, 8), pady=10)
+        # self.searchbox.bind("<Return>", self.search_dish)
+        self.search_btn = customtkinter.CTkButton(
+            self.searchf, text="Search", width=120, 
+        )
+        self.search_btn.pack(side="left", padx=8, pady=10)
+
+
+        self.contentf = customtkinter.CTkFrame(self)
+        self.contentf.grid(row=2, column=0, padx=20, pady=(15, 20), sticky='nsew')
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+        self.backend = self.master.system.dish_manager
 
 
 
+    #NEEDED FILLING
+
+
+
+    #Clear
+    def clear_result(self):
+        self.result_area.destroy()
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
 
 
 class Ingredients(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         
-        self.Label = customtkinter.CTkLabel(self, text="Ingredients")
-        self.Label.pack()
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
+        
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0, column=0, padx=20, pady=(10, 0), sticky="nsw")
+        self.label = customtkinter.CTkLabel(
+            self.lbf, text="Ingredient Management", text_color="#D8D8D8",
+            font=('Segoe UI', 50, 'bold')
+        )
+        self.label.pack(padx=20, pady=20)
+
+
+        self.searchf = customtkinter.CTkFrame(self)
+        self.searchf.grid(row=1, column=0, padx=20, pady=(20, 0), sticky='nsew')
+        self.searchvar = customtkinter.StringVar()
+        self.icon = customtkinter.CTkLabel(self.searchf, text="🔍", font=("Segoe UI Emoji", 24))
+        self.icon.pack(side="left", padx=8, pady=10)
+        self.searchbox = customtkinter.CTkEntry(
+            self.searchf, textvariable=self.searchvar, placeholder_text='Search for ingredients',
+            fg_color=['gray90', 'gray16'], border_width=1, width=200, height=40
+        )
+        self.searchbox.pack(side="left", padx=(0, 8), pady=10)
+        # self.searchbox.bind("<Return>", self.search_ingr)
+        self.search_btn = customtkinter.CTkButton(
+            self.searchf, text="Search", width=120,
+        )
+        self.search_btn.pack(side="left", padx=8, pady=10)
+
+
+        self.contentf = customtkinter.CTkFrame(self)
+        self.contentf.grid(row=2, column=0, padx=20, pady=(15, 20), sticky='nsew')
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+        self.backend = self.master.system.ingr_manager
+
+
+
+    #NEEDED FILLING
+
+
+
+    #Clear
+    def clear_result(self):
+        self.result_area.destroy()
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
 
 class Orders(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.Label = customtkinter.CTkLabel(self, text="Orders")
-        self.Label.pack()
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
+        
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0, column=0, padx=20, pady=(10, 0), sticky="nsw")
+        self.label = customtkinter.CTkLabel(
+            self.lbf, text="Order Management", text_color="#D8D8D8",
+            font=('Segoe UI', 50, 'bold')
+        )
+        self.label.pack(padx=20, pady=20)
+
+
+        self.searchf = customtkinter.CTkFrame(self)
+        self.searchf.grid(row=1, column=0, padx=20, pady=(20, 0), sticky='nsew')
+        self.searchvar = customtkinter.StringVar()
+        self.icon = customtkinter.CTkLabel(self.searchf, text="🔍", font=("Segoe UI Emoji", 24))
+        self.icon.pack(side="left", padx=8, pady=10)
+        self.searchbox = customtkinter.CTkEntry(
+            self.searchf, textvariable=self.searchvar, placeholder_text='Search for orders',
+            fg_color=['gray90', 'gray16'], border_width=1, width=200, height=40
+        )
+        self.searchbox.pack(side="left", padx=(0, 8), pady=10)
+        # self.searchbox.bind("<Return>", self.search_order)
+        self.search_btn = customtkinter.CTkButton(
+            self.searchf, text="Search", width=120, 
+        )
+        self.search_btn.pack(side="left", padx=8, pady=10)
+
+
+        self.contentf = customtkinter.CTkFrame(self)
+        self.contentf.grid(row=2, column=0, padx=20, pady=(15, 20), sticky='nsew')
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+        self.backend = self.master.system.order_manager
+
+
+
+    #NEEDED FILLING
+
+
+
+    #Clear
+    def clear_result(self):
+        self.result_area.destroy()
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
 
 class Employees(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.Label = customtkinter.CTkLabel(self, text="Employees")
-        self.Label.pack()
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
+        
+        self.lbf = customtkinter.CTkFrame(self, fg_color=['gray90', 'gray13'])
+        self.lbf.grid(row=0, column=0, padx=20, pady=(10, 0), sticky="nsw")
+        self.label = customtkinter.CTkLabel(
+            self.lbf, text="Employees Management", text_color="#D8D8D8",
+            font=('Segoe UI', 50, 'bold')
+        )
+        self.label.pack(padx=20, pady=20)
+
+
+        self.searchf = customtkinter.CTkFrame(self)
+        self.searchf.grid(row=1, column=0, padx=20, pady=(20, 0), sticky='nsew')
+        self.searchvar = customtkinter.StringVar()
+        self.icon = customtkinter.CTkLabel(self.searchf, text="🔍", font=("Segoe UI Emoji", 24))
+        self.icon.pack(side="left", padx=8, pady=10)
+        self.searchbox = customtkinter.CTkEntry(
+            self.searchf, textvariable=self.searchvar, placeholder_text='Search for employees',
+            fg_color=['gray90', 'gray16'], border_width=1, width=200, height=40
+        )
+        self.searchbox.pack(side="left", padx=(0, 8), pady=10)
+        # self.searchbox.bind("<Return>", self.search_emp)
+        self.search_btn = customtkinter.CTkButton(
+            self.searchf, text="Search", width=120, 
+        )
+        self.search_btn.pack(side="left", padx=8, pady=10)
+
+
+        self.contentf = customtkinter.CTkFrame(self)
+        self.contentf.grid(row=2, column=0, padx=20, pady=(15, 20), sticky='nsew')
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+        self.backend = self.master.system.emp_manager
+
+
+
+    #NEEDED FILLING
+
+
+
+    #Clear
+    def clear_result(self):
+        self.result_area.destroy()
+        self.result_area = customtkinter.CTkFrame(self.contentf)
+        self.result_area.pack(fill="both", expand=True, padx=20, pady=20)
 
 
 
@@ -452,7 +633,7 @@ class Root(customtkinter.CTk):
 
 #Mainloop
 if __name__ == "__main__":
-    root = Root(Customers)
+    root = Root(Dishes)
     root.update()
 
     root.mainloop()
